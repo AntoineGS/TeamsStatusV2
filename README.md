@@ -56,3 +56,7 @@ Start-Service -Name "Microsoft Teams Status Monitor"
 ```
 
 After completing the steps below, start your Teams client and verify if the status and activity is updated as expected.
+
+# Credit
+Original work by EBOOZ, which can be found here: https://github.com/EBOOZ/TeamsStatus.
+As the project seemed abandoned with multiple PRs not being addressed it has been cloned into this repo.
