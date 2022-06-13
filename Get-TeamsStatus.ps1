@@ -25,6 +25,7 @@ Param($SetStatus)
 
 # Import Settings PowerShell script
 . ($PSScriptRoot + "\Settings.ps1")
+. ($PSScriptRoot + "\Lang-$Lang.ps1")
 
 $headers = @{"Authorization"="Bearer $HAToken";}
 $Enable = 1
@@ -166,6 +167,7 @@ If ($CurrentStatus -ne $Status -and $Status -ne $null) {
      }
 	 
     $params = $params | ConvertTo-Json
+    Write-Host "$HAUrl"
     Invoke-RestMethod -Uri "$HAUrl/api/states/$entityStatus" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json" 
 }
 
@@ -180,6 +182,7 @@ If ($CurrentActivity -ne $Activity) {
         }
      }
     $params = $params | ConvertTo-Json
+    Write-Host "$HAUrl"
     Invoke-RestMethod -Uri "$HAUrl/api/states/$entityActivity" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json" 
 }
     Start-Sleep 1
