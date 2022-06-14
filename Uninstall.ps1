@@ -1,0 +1,1 @@
+﻿Start-Process -FilePath .\nssm.exe -ArgumentList 'remove "Microsoft Teams Status Monitor" confirm'
