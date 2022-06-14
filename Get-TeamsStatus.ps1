@@ -27,28 +27,41 @@ Param($SetStatus)
 . ($PSScriptRoot + "\Settings.ps1")
 . ($PSScriptRoot + "\Lang-$Lang.ps1")
 
+# Some variables
 $headers = @{"Authorization"="Bearer $HAToken";}
 $defaultIcon = "mdi:microsoft-teams"
+$statusActivityHash = @{
+    $lgAvailable = "Available"
+    $lgBusy = "Busy"
+    $lgAway = "Away"
+    $lgBeRightBack = "BeRightBack"
+    $lgDoNotDisturb = "DoNotDisturb"
+    $lgFocusing = "Focusing"
+    $lgPresenting = "Presenting"
+    $lgInAMeeting = "InAMeeting"
+    $lgOffline = "Offline"
+}
 
+# Does the call to Home Assistant's API
 function InvokeHA{
-	param ([string]$state, [string]$friendlyName, [string]$icon, [string]$entity)
+    param ([string]$state, [string]$friendlyName, [string]$icon, [string]$entity)
 
-    Write-Host ("Setting Microsoft Teams status to "+$state+":")
+    Write-Host ("Setting Microsoft Teams <"+$entity+"> to <"+$state+">:")
     $params = @{
         "state"="$state";
         "attributes"= @{
-			"friendly_name"="$friendlyName";
-			"icon"="$icon";
-		}
+            "friendly_name"="$friendlyName";
+            "icon"="$icon";
+        }
     }
-	 
+     
     $params = $params | ConvertTo-Json
-    Invoke-RestMethod -Uri "$HAUrl/api/states/$entity" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json"	
+    Invoke-RestMethod -Uri "$HAUrl/api/states/$entity" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json"    
 }
 
 # Run the script when a parameter is used and stop when done
 If($null -ne $SetStatus){
-	InvokeHA -state $SetStatus -friendlyName $entityStatusName, -icon $defaultIcon	-entity $entityStatus
+    InvokeHA -state $SetStatus -friendlyName $entityStatusName, -icon $defaultIcon -entity $entityStatus
     break
 }
 
@@ -73,77 +86,35 @@ Get-Content -Path $env:APPDATA"\Microsoft\Teams\logs.txt" -Tail 1000 -ReadCount 
 
     # Check if Teams is running and start monitoring the log if it is
     If ($null -ne $TeamsProcess) {
-        If($TeamsStatus -eq $null){ }
-        ElseIf ($TeamsStatus -like "*Setting the taskbar overlay icon - $lgAvailable*" -or `
-            $TeamsStatus -like "*StatusIndicatorStateService: Added Available*" -or `
-            $TeamsStatus -like "*StatusIndicatorStateService: Added NewActivity (current state: Available -> NewActivity*") {
-            $Status = $lgAvailable
-            Write-Host $Status
+        If($TeamsStatus -eq $null){ 
+            $Status = $null
         }
-        ElseIf ($TeamsStatus -like "*Setting the taskbar overlay icon - $lgBusy*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added Busy*" -or `
-                $TeamsStatus -like "*Setting the taskbar overlay icon - $lgOnThePhone*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added OnThePhone*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added NewActivity (current state: Busy -> NewActivity*") {
-            $Status = $lgBusy
-            Write-Host $Status
+        ElseIf($TeamsStatus -like "*Setting the taskbar overlay icon - $lgOnThePhone*" -or `
+               $TeamsStatus -like "*StatusIndicatorStateService: Added OnThePhone*") {
+                $Status = $lgBusy    
         }
-        ElseIf ($TeamsStatus -like "*Setting the taskbar overlay icon - $lgAway*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added Away*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added NewActivity (current state: Away -> NewActivity*") {
-            $Status = $lgAway
-            Write-Host $Status
+        Else {
+            $statusActivityHash.GetEnumerator() | ForEach-Object {
+                If ($TeamsStatus -like "*Setting the taskbar overlay icon - $($_.key)*" -or `
+                    $TeamsStatus -like "*StatusIndicatorStateService: Added $($_.value)*" -or `
+                    $TeamsStatus -like "*StatusIndicatorStateService: Added NewActivity (current state: $($_.value) -> NewActivity*") {
+                    $Status = $($_.key)
+                }
+            }
         }
-        ElseIf ($TeamsStatus -like "*Setting the taskbar overlay icon - $lgBeRightBack*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added BeRightBack*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added NewActivity (current state: BeRightBack -> NewActivity*") {
-            $Status = $lgBeRightBack
-            Write-Host $Status
-        }
-        ElseIf ($TeamsStatus -like "*Setting the taskbar overlay icon - $lgDoNotDisturb *" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added DoNotDisturb*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added NewActivity (current state: DoNotDisturb -> NewActivity*") {
-            $Status = $lgDoNotDisturb
-            Write-Host $Status
-        }
-        ElseIf ($TeamsStatus -like "*Setting the taskbar overlay icon - $lgFocusing*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added Focusing*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added NewActivity (current state: Focusing -> NewActivity*") {
-            $Status = $lgFocusing
-            Write-Host $Status
-        }
-        ElseIf ($TeamsStatus -like "*Setting the taskbar overlay icon - $lgPresenting*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added Presenting*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added NewActivity (current state: Presenting -> NewActivity*") {
-            $Status = $lgPresenting
-            Write-Host $Status
-        }
-        ElseIf ($TeamsStatus -like "*Setting the taskbar overlay icon - $lgInAMeeting*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added InAMeeting*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added NewActivity (current state: InAMeeting -> NewActivity*") {
-            $Status = $lgInAMeeting
-            Write-Host $Status
-        }
-        ElseIf ($TeamsStatus -like "*Setting the taskbar overlay icon - $lgOffline*" -or `
-                $TeamsStatus -like "*StatusIndicatorStateService: Added Offline*") {
-            $Status = $lgOffline
-            Write-Host $Status
-        }
-
+        
         If($TeamsActivity -eq $null){ }
         ElseIf ($TeamsActivity -like "*Resuming daemon App updates*" -or `
             $TeamsActivity -like "*SfB:TeamsNoCall*" -or `
             $TeamsActivity -like "*name: desktop_call_state_change_send, isOngoing: false*") {
             $Activity = $lgNotInACall
             $ActivityIcon = $iconNotInACall
-            Write-Host $Activity
         }
         ElseIf ($TeamsActivity -like "*Pausing daemon App updates*" -or `
             $TeamsActivity -like "*SfB:TeamsActiveCall*" -or `
             $TeamsActivity -like "*name: desktop_call_state_change_send, isOngoing: true*") {
             $Activity = $lgInACall
             $ActivityIcon = $iconInACall
-            Write-Host $Activity
         }
     }
     # Set status to Offline when the Teams application is not running
@@ -151,24 +122,24 @@ Get-Content -Path $env:APPDATA"\Microsoft\Teams\logs.txt" -Tail 1000 -ReadCount 
         $Status = $lgOffline
         $Activity = $lgNotInACall
         $ActivityIcon = $iconNotInACall
-        Write-Host $Status
-        Write-Host $Activity
     }
+    
+    Write-Host $Status
+    Write-Host $Activity    
 
     # Call Home Assistant API to set the status and activity sensors
     If ($CurrentStatus -ne $Status -and $Status -ne $null) {
         $CurrentStatus = $Status
 
-		# Use default credentials in the case of a proxy server
-		$Wcl = new-object System.Net.WebClient
-		$Wcl.Headers.Add("user-agent", "PowerShell Script")
-		$Wcl.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials 
-		InvokeHA -state $CurrentStatus -friendlyName $entityStatusName, -icon $defaultIcon -entity $entityStatus
-	}
+        # Use default credentials in the case of a proxy server
+        $Wcl = new-object System.Net.WebClient
+        $Wcl.Headers.Add("user-agent", "PowerShell Script")
+        $Wcl.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials 
+        InvokeHA -state $CurrentStatus -friendlyName $entityStatusName, -icon $defaultIcon -entity $entityStatus
+    }
 
-	If ($CurrentActivity -ne $Activity) {
-		$CurrentActivity = $Activity
-		InvokeHA -state $Activity -friendlyName $entityActivityName, -icon $ActivityIcon -entity $entityActivity
-	}
+    If ($CurrentActivity -ne $Activity) {
+        $CurrentActivity = $Activity
+        InvokeHA -state $Activity -friendlyName $entityActivityName, -icon $ActivityIcon -entity $entityActivity
+    }
 }
-
