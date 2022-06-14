@@ -1,9 +1,9 @@
-# Configure the variables below that will be used in the script
-$SettingsHAToken = "<Insert token>" # Example: eyJ0eXAiOiJKV1..., can also be an environment variable named TSHATOKEN
-$SettingsUserName = "<UserName>" # When not sure, open a command prompt and type: echo %USERNAME%
-$SettingsHAUrl = "<HAUrl>" # Example: https://yourha.duckdns.org or http://192.168.1.50:8123, can also be an environment variable named TSHAURL
+# Configure the variables below that will be used in the script, you can also use environment variables for most of them
+$settingsHAToken = "<Insert token>" # Example: eyJ0eXAiOiJKV1..., can also be an environment variable named TSHATOKEN
+$settingsHAUrl = "<HAUrl>" # Example: https://yourha.duckdns.org or http://192.168.1.50:8123, can also be an environment variable named TSHAURL
+$settingsAppDataPath = "<App Data Path>" # When not sure, open a command prompt and type: echo %APPDATA% ; Configuration priority: the environment variable TSAPPDATAPATH, this setting then $env:APPDATA
 
-# Set language variables below (ie: en, nl)
+# Set language variables below (currently supported: en, nl)
 $Lang = "en"
 
 # Set icons to use for call activity
@@ -16,3 +16,6 @@ $entityStatus = "sensor.teams_status"
 $entityStatusName = "Microsoft Teams status"
 $entityActivity = "sensor.teams_activity"
 $entityActivityName = "Microsoft Teams activity"
+
+# Debugging, use to investigate when the script is not behaving as expected
+$enableLogs = "N"

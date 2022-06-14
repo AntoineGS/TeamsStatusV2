@@ -28,8 +28,9 @@ Param($SetStatus)
 . ($PSScriptRoot + "\Lang-$Lang.ps1")
 
 # Some variables
-$HAToken = if ([string]::IsNullOrEmpty($env:tshatoken)) {$SettingsHAToken} else {$env:tshatoken}
-$HAUrl = if ([string]::IsNullOrEmpty($env:TSHAURL)) {$SettingsHAUrl} else {$env:TSHAURL}
+$HAToken = if ([string]::IsNullOrEmpty($env:TSHATOKEN)) {$settingsHAToken} else {$env:TSHATOKEN}
+$HAUrl = if ([string]::IsNullOrEmpty($env:TSHAURL)) {$settingsHAUrl} else {$env:TSHAURL}
+$appDataPath = if ([string]::IsNullOrEmpty($env:TSAPPDATAPATH)) { if($settingsAppDataPath -ne "<App Data Path>") {$settingsAppDataPath} else {$env:APPDATA}} else {$env:TSAPPDATAPATH} 
 $headers = @{"Authorization"="Bearer $HAToken";}
 $defaultIcon = "mdi:microsoft-teams"
 $statusActivityHash = @{
@@ -68,7 +69,7 @@ If($null -ne $SetStatus){
 }
 
 # Start monitoring the Teams logfile when no parameter is used to run the script
-Get-Content -Path $env:APPDATA"\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1000 -ReadCount 0 -Wait | % {
+Get-Content -Path $appDataPath"\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1000 -ReadCount 0 -Wait | % {
     # Get Teams Logfile and last icon overlay status
     $TeamsStatus = $_ | Select-String -Pattern `
         'Setting the taskbar overlay icon -',`

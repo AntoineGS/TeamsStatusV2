@@ -1,6 +1,19 @@
+# Import Settings PowerShell script
+. ($PSScriptRoot + "\Uninstall.ps1")
+
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
-Unblock-File .\Settings.ps1
-Unblock-File .\Lang-*.ps1
-Unblock-File .\Get-TeamsStatus.ps1
-Start-Process -FilePath .\nssm.exe -ArgumentList 'install "Microsoft Teams Status Monitor" "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" "-command "& { . C:\Scripts\Get-TeamsStatus.ps1 }"" ' -NoNewWindow -Wait
+Unblock-File $PSScriptRoot\Settings.ps1
+Unblock-File $PSScriptRoot\Lang-*.ps1
+Unblock-File $PSScriptRoot\Get-TeamsStatus.ps1
+
+# In case this is re-run as a reinstall
+UninstallService
+
+# Enable logging if active
+if ($enableLogs -eq "Y") {
+    $loggingParam = "2>&1 | tee -filePath $PSScriptRoot\TeamsStatusLog.txt"
+}
+
+$argumentList = 'install "Microsoft Teams Status Monitor" "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" "-command "& { . ' + "$PSScriptRoot\Get-TeamsStatus.ps1 $loggingParam" + '}"" '
+Start-Process -FilePath $PSScriptRoot\nssm.exe -ArgumentList $argumentList -NoNewWindow -Wait
 Start-Service -Name "Microsoft Teams Status Monitor"
