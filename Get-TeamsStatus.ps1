@@ -28,20 +28,27 @@ Param($SetStatus)
 . ($PSScriptRoot + "\Lang-$Lang.ps1")
 
 $headers = @{"Authorization"="Bearer $HAToken";}
+$defaultIcon = "mdi:microsoft-teams"
 
-# Run the script when a parameter is used and stop when done
-If($null -ne $SetStatus){
-    Write-Host ("Setting Microsoft Teams status to "+$SetStatus+":")
+function InvokeHA{
+	param ([string]$state, [string]$friendlyName, [string]$icon, [string]$entity)
+
+    Write-Host ("Setting Microsoft Teams status to "+$state+":")
     $params = @{
-        "state"="$SetStatus";
+        "state"="$state";
         "attributes"= @{
-			"friendly_name"="$entityStatusName";
-			"icon"="mdi:microsoft-teams";
+			"friendly_name"="$friendlyName";
+			"icon"="$icon";
 		}
     }
 	 
     $params = $params | ConvertTo-Json
-    Invoke-RestMethod -Uri "$HAUrl/api/states/$entityStatus" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json"
+    Invoke-RestMethod -Uri "$HAUrl/api/states/$entity" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json"	
+}
+
+# Run the script when a parameter is used and stop when done
+If($null -ne $SetStatus){
+	InvokeHA -state $SetStatus -friendlyName $entityStatusName, -icon $defaultIcon	-entity $entityStatus
     break
 }
 
@@ -156,34 +163,12 @@ Get-Content -Path $env:APPDATA"\Microsoft\Teams\logs.txt" -Tail 1000 -ReadCount 
 		$Wcl = new-object System.Net.WebClient
 		$Wcl.Headers.Add("user-agent", "PowerShell Script")
 		$Wcl.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials 
-
-		$params = @{
-			"state"="$CurrentStatus";
-			"attributes"= @{
-				"friendly_name"="$entityStatusName";
-				"icon"="mdi:microsoft-teams";
-			}
-		}
-		 
-		$params = $params | ConvertTo-Json
-		Write-Host "$HAUrl"
-		Invoke-RestMethod -Uri "$HAUrl/api/states/$entityStatus" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json" 
+		InvokeHA -state $CurrentStatus -friendlyName $entityStatusName, -icon $defaultIcon -entity $entityStatus
 	}
 
 	If ($CurrentActivity -ne $Activity) {
 		$CurrentActivity = $Activity
-
-		$params = @{
-		"state"="$Activity";
-		"attributes"= @{
-			"friendly_name"="$entityActivityName";
-			"icon"="$ActivityIcon";
-			}
-		}
-
-		$params = $params | ConvertTo-Json
-		Write-Host "$HAUrl"
-		Invoke-RestMethod -Uri "$HAUrl/api/states/$entityActivity" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json" 
+		InvokeHA -state $Activity -friendlyName $entityActivityName, -icon $ActivityIcon -entity $entityActivity
 	}
 }
 
