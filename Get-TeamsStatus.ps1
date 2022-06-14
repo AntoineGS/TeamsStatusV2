@@ -33,12 +33,12 @@ $headers = @{"Authorization"="Bearer $HAToken";}
 If($null -ne $SetStatus){
     Write-Host ("Setting Microsoft Teams status to "+$SetStatus+":")
     $params = @{
-     "state"="$SetStatus";
-     "attributes"= @{
-        "friendly_name"="$entityStatusName";
-        "icon"="mdi:microsoft-teams";
-        }
-     }
+        "state"="$SetStatus";
+        "attributes"= @{
+			"friendly_name"="$entityStatusName";
+			"icon"="mdi:microsoft-teams";
+		}
+    }
 	 
     $params = $params | ConvertTo-Json
     Invoke-RestMethod -Uri "$HAUrl/api/states/$entityStatus" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json"
@@ -47,7 +47,6 @@ If($null -ne $SetStatus){
 
 # Start monitoring the Teams logfile when no parameter is used to run the script
 Get-Content -Path $env:APPDATA"\Microsoft\Teams\logs.txt" -Tail 1000 -ReadCount 0 -Wait | % {
-    
     # Get Teams Logfile and last icon overlay status
     $TeamsStatus = $_ | Select-String -Pattern `
         'Setting the taskbar overlay icon -',`
@@ -142,49 +141,49 @@ Get-Content -Path $env:APPDATA"\Microsoft\Teams\logs.txt" -Tail 1000 -ReadCount 
     }
     # Set status to Offline when the Teams application is not running
     Else {
-            $Status = $lgOffline
-            $Activity = $lgNotInACall
-            $ActivityIcon = $iconNotInACall
-            Write-Host $Status
-            Write-Host $Activity
+        $Status = $lgOffline
+        $Activity = $lgNotInACall
+        $ActivityIcon = $iconNotInACall
+        Write-Host $Status
+        Write-Host $Activity
     }
 
     # Call Home Assistant API to set the status and activity sensors
     If ($CurrentStatus -ne $Status -and $Status -ne $null) {
         $CurrentStatus = $Status
 
-    # Use default credentials in the case of a proxy server
-    $Wcl = new-object System.Net.WebClient
-    $Wcl.Headers.Add("user-agent", "PowerShell Script")
-    $Wcl.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials 
+		# Use default credentials in the case of a proxy server
+		$Wcl = new-object System.Net.WebClient
+		$Wcl.Headers.Add("user-agent", "PowerShell Script")
+		$Wcl.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials 
 
-    $params = @{
-     "state"="$CurrentStatus";
-     "attributes"= @{
-        "friendly_name"="$entityStatusName";
-        "icon"="mdi:microsoft-teams";
-        }
-     }
-	 
-    $params = $params | ConvertTo-Json
-    Write-Host "$HAUrl"
-    Invoke-RestMethod -Uri "$HAUrl/api/states/$entityStatus" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json" 
-}
+		$params = @{
+			"state"="$CurrentStatus";
+			"attributes"= @{
+				"friendly_name"="$entityStatusName";
+				"icon"="mdi:microsoft-teams";
+			}
+		}
+		 
+		$params = $params | ConvertTo-Json
+		Write-Host "$HAUrl"
+		Invoke-RestMethod -Uri "$HAUrl/api/states/$entityStatus" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json" 
+	}
 
-    If ($CurrentActivity -ne $Activity) {
-        $CurrentActivity = $Activity
+	If ($CurrentActivity -ne $Activity) {
+		$CurrentActivity = $Activity
 
-        $params = @{
-        "state"="$Activity";
-        "attributes"= @{
-            "friendly_name"="$entityActivityName";
-            "icon"="$ActivityIcon";
-            }
-        }
+		$params = @{
+		"state"="$Activity";
+		"attributes"= @{
+			"friendly_name"="$entityActivityName";
+			"icon"="$ActivityIcon";
+			}
+		}
 
-        $params = $params | ConvertTo-Json
-        Write-Host "$HAUrl"
-        Invoke-RestMethod -Uri "$HAUrl/api/states/$entityActivity" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json" 
-    }
+		$params = $params | ConvertTo-Json
+		Write-Host "$HAUrl"
+		Invoke-RestMethod -Uri "$HAUrl/api/states/$entityActivity" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json" 
+	}
 }
 
