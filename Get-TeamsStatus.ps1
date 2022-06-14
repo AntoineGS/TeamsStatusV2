@@ -68,7 +68,7 @@ If($null -ne $SetStatus){
 }
 
 # Start monitoring the Teams logfile when no parameter is used to run the script
-Get-Content -Path $env:APPDATA"\Microsoft\Teams\logs.txt" -Tail 1000 -ReadCount 0 -Wait | % {
+Get-Content -Path $env:APPDATA"\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1000 -ReadCount 0 -Wait | % {
     # Get Teams Logfile and last icon overlay status
     $TeamsStatus = $_ | Select-String -Pattern `
         'Setting the taskbar overlay icon -',`
