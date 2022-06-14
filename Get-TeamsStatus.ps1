@@ -28,6 +28,8 @@ Param($SetStatus)
 . ($PSScriptRoot + "\Lang-$Lang.ps1")
 
 # Some variables
+$HAToken = if ([string]::IsNullOrEmpty($env:tshatoken)) {$SettingsHAToken} else {$env:tshatoken}
+$HAUrl = if ([string]::IsNullOrEmpty($env:TSHAURL)) {$SettingsHAUrl} else {$env:TSHAURL}
 $headers = @{"Authorization"="Bearer $HAToken";}
 $defaultIcon = "mdi:microsoft-teams"
 $statusActivityHash = @{
@@ -124,8 +126,8 @@ Get-Content -Path $env:APPDATA"\Microsoft\Teams\logs.txt" -Tail 1000 -ReadCount 
         $ActivityIcon = $iconNotInACall
     }
     
-    Write-Host $Status
-    Write-Host $Activity    
+    Write-Host "Teams Status: $Status"
+    Write-Host "Teams Activity: $Activity"
 
     # Call Home Assistant API to set the status and activity sensors
     If ($CurrentStatus -ne $Status -and $Status -ne $null) {
