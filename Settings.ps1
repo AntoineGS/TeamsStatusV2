@@ -1,7 +1,7 @@
 # Configure the variables below that will be used in the script
-$SettingsHAToken = "<Insert token>" # Example: eyJ0eXAiOiJKV1...
+$SettingsHAToken = "<Insert token>" # Example: eyJ0eXAiOiJKV1..., can also be an environment variable named TSHATOKEN
 $SettingsUserName = "<UserName>" # When not sure, open a command prompt and type: echo %USERNAME%
-$SettingsHAUrl = "<HAUrl>" # Example: https://yourha.duckdns.org or http://192.168.1.50:8123
+$SettingsHAUrl = "<HAUrl>" # Example: https://yourha.duckdns.org or http://192.168.1.50:8123, can also be an environment variable named TSHAURL
 
 # Set language variables below (ie: en, nl)
 $Lang = "en"
