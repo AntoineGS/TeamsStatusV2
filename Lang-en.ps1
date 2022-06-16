@@ -10,3 +10,6 @@ $lgInAMeeting = "In a meeting"
 $lgOffline = "Offline"
 $lgNotInACall = "Not in a call"
 $lgInACall = "In a call"
+# sensor.teams_cam_status
+$lgCameraOn = "On"
+$lgCameraOff = "Off"
