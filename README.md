@@ -66,6 +66,6 @@ You can uninstall the service by executing the `Uninstall.ps1` script, using the
 ## Contribution
 Pull Requests are welcomed!
 
-# Credit
+## Credit
 Original work by EBOOZ, which can be found here: https://github.com/EBOOZ/TeamsStatus.
 As the project seemed abandoned with multiple PRs not being addressed it has been cloned into this repo.
