@@ -12,10 +12,13 @@ $iconNotInACall = "mdi:phone-off"
 $iconMonitoring = "mdi:api"
 
 # Set entities to post to
-$entityStatus = "sensor.teams_status"
-$entityStatusName = "Microsoft Teams status"
-$entityActivity = "sensor.teams_activity"
-$entityActivityName = "Microsoft Teams activity"
+# Friendly names are required or they get reset in HA through the API...
+$entityStatusId = "sensor.teams_status"
+$entityStatusName = "Microsoft Teams Status"
+$entityActivityId = "sensor.teams_activity"
+$entityActivityName = "Microsoft Teams Activity"
+$entityCamStatusId = "sensor.teams_cam_status"
+$entityCamStatusName = "Microsoft Teams Camera Status"
 
 # Debugging, use to investigate when the script is not behaving as expected
 $enableLogs = "N"
