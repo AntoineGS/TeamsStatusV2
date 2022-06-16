@@ -49,16 +49,15 @@ sensor:
   * Using Environment Variables (preferred as it allows you to change the script files easily without re-adding your configurations)
     * Add a variable `TSHATOKEN` with the token you generated (ie: eyJ0eXAiOiJKV1... with many more characters)
     * Add a variable `TSHAURL` with the URL to your Home Assistant server (ie: https://yourha.duckdns.org or http://192.168.1.50:8123)
-    * Add a variable `TSAPPDATAPATH` with the output of the command prompt output of `echo %APPDATA%`
   * Edit the Settings.ps1 file and:
     * Replace `<Insert token>` with the token you generated
     * Replace `<HA URL>` with the URL to your Home Assistant server
-    * Replace `<App Data Path>` with the output of the command prompt output of `echo %APPDATA%`
     * Adjust the language settings to your preference
 * Start a elevated PowerShell prompt, and execute the `Install.ps1` script
   ```powershell
   C:\Scripts\Install.ps1
   ```
+* When asked, enter your Windows password, the service will be installed under that user to have access to the registry key for the camera
   
 ## Uninstallation
 You can uninstall the service by executing the `Uninstall.ps1` script, using the previous path as an example, in PowerShell you would run:

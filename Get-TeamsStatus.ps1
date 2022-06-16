@@ -1,10 +1,10 @@
 ﻿<#
 .NOTES
     Name: Get-TeamsStatus.ps1
-    Original Author (abandoned): Danny de Vries
-    Maintainer/New Author: Antoine G Simard
+    Original Author: Danny de Vries
+    Maintainer: 
     Requires: PowerShell v2 or higher
-    Version History: https://github.com/AntoineGS/TeamsStatusV2
+    Version History: https://github.com/EBOOZ/TeamsStatus/commits/main
 .SYNOPSIS
     Sets the status of the Microsoft Teams client to Home Assistant.
 .DESCRIPTION
@@ -27,12 +27,12 @@ Param($SetStatus)
 # Import Settings PowerShell script
 . ($PSScriptRoot + "\Settings.ps1")
 . ($PSScriptRoot + "\Lang-$Lang.ps1")
+. ($PSScriptRoot + "\TSFunctions.ps1")
 
 # Some variables
 $HAToken = if ([string]::IsNullOrEmpty($env:TSHATOKEN)) {$settingsHAToken} else {$env:TSHATOKEN}
 $HAUrl = if ([string]::IsNullOrEmpty($env:TSHAURL)) {$settingsHAUrl} else {$env:TSHAURL}
-$appDataPath = if ([string]::IsNullOrEmpty($env:TSAPPDATAPATH)) { if($settingsAppDataPath -ne "<App Data Path>") {$settingsAppDataPath} 
-                                                                  else {$env:APPDATA} } else {$env:TSAPPDATAPATH} 
+
 $headers = @{"Authorization"="Bearer $HAToken";}
 $statusActivityHash = @{
     $lgAvailable = "Available"
@@ -56,23 +56,6 @@ $WebcamStatus = $lgCameraOff
 $WebcamIcon = "mdi:camera-off"
 $defaultIcon = "mdi:microsoft-teams"
 
-# Does the call to Home Assistant's API
-function InvokeHA {
-    param ([string]$state, [string]$friendlyName, [string]$icon, [string]$entityId)
-
-    Write-Host ("Setting <"+$friendlyName+"> to <"+$state+">:")
-    $params = @{
-        "state"="$state";
-        "attributes"= @{
-            "friendly_name"="$friendlyName"; # Redundant as it is already in HA but without it HA resets it to the sensor id
-            "icon"="$icon";
-        }
-    }
-     
-    $params = $params | ConvertTo-Json
-    Invoke-RestMethod -Uri "$HAUrl/api/states/$entityId" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json"    
-}
-
 # Run the script when a parameter is used and stop when done
 If($null -ne $SetStatus){
     InvokeHA -state $SetStatus -friendlyName $entityStatusName -icon $defaultIcon -entityId $entityStatusId
@@ -80,7 +63,7 @@ If($null -ne $SetStatus){
 }
 
 # Start monitoring the Teams logfile when no parameter is used to run the script
-Get-Content -Path $appDataPath"\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1000 -ReadCount 0 -Wait | % {
+Get-Content -Path "C:\Users\$env:USERNAME\AppData\Roaming\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1000 -ReadCount 0 -Wait | % {
     # Get Teams Logfile and last icon overlay status
     $TeamsStatus = $_ | Select-String -Pattern `
         'Setting the taskbar overlay icon -',`
@@ -145,7 +128,7 @@ Get-Content -Path $appDataPath"\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1
       # triggers the log to set it to Off
     If($Activity -eq $lgInACall -or $WebcamStatus -eq $lgCameraOn) {
         $registryPath = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged\" + 
-                        $appDataPath.Replace('\', '#').Replace('#Roaming', '#Local') + "#Microsoft#Teams#current#Teams.exe"
+                        "C:#Users#$env:USERNAME#AppData#Local#Microsoft#Teams#current#Teams.exe"
 
         $webcam = Get-ItemProperty -Path $registryPath -Name LastUsedTimeStop | select LastUsedTimeStop
 
