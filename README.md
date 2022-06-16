@@ -5,13 +5,15 @@ This PowerShell script/service uses the local Teams' log file to track the statu
 Microsoft provides the status of your account via the Graph API, however to access the Graph API, your organization needs to grant consent for the organization so everybody can read their Teams status.
 This solution is great for anyone who's organization does not allow this.
 
-This script makes use of two sensors that are created in Home Assistant up front:
+This script makes use of three sensors that are created in Home Assistant up front:
 
 * sensor.teams_status
 * sensor.teams_activity
+* sensor.teams_cam_status
 
 sensor.teams_status displays that availability status of your Teams client based on the icon overlay in the taskbar on Windows. 
 sensor.teams_activity shows if you are in a call or not based on the App updates deamon, which is paused as soon as you join a call.
+sensor.teams_cam_status shows if you have your webcam turned on or not during a call.
 
 ## Important
 This solution is created to work with Home Assistant. 
@@ -50,17 +52,24 @@ sensor:
     * Replace `<Insert token>` with the token you generated
     * Replace `<HA URL>` with the URL to your Home Assistant server
     * Adjust the language settings to your preference
-* Start a elevated PowerShell prompt, and execute the `Install.ps1` script
+* Start a elevated PowerShell prompt, and execute the following scripts
   ```powershell
+  Unblock-File C:\Scripts\Install.ps1
   C:\Scripts\Install.ps1
   ```
 * When asked, enter your Windows password, the service will be installed under that user to have access to the registry key for the camera
 * After completing the steps above, start your Teams client and verify if the status and activity is updated as expected.
   
 ## Uninstallation
-You can uninstall the service by executing the `Uninstall.ps1` script, using the previous path as an example, in PowerShell you would run:
+You can uninstall the service by executing the `Uninstall.ps1` script.
+Using the previous path as an example, in PowerShell you would run:
   ```powershell
   C:\Scripts\Uninstall.ps1
+  ```
+Note: You must have run the `Install.ps1` at some point or you will get a file "is not is not digitally signed" error.
+If that happens, simply run the following before executing the uninstaller again:
+  ```powershell
+  Unblock-File C:\Scripts\Uninstall.ps1
   ```
 
 ## Contribution

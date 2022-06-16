@@ -6,6 +6,7 @@ Unblock-File $PSScriptRoot\Settings.ps1
 Unblock-File $PSScriptRoot\Lang-*.ps1
 Unblock-File $PSScriptRoot\Get-TeamsStatus.ps1
 Unblock-File $PSScriptRoot\TSFunctions.ps1
+Unblock-File $PSScriptRoot\Uninstall.ps1
 
 # In case this is re-run as a reinstall
 # If you get a "Cannot find any service with service name" do not worry about it as it just means the service was not installed yet
