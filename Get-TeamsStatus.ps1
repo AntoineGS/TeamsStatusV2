@@ -145,11 +145,6 @@ Get-Content -Path "C:\Users\$env:USERNAME\AppData\Roaming\Microsoft\Teams\logs.t
     # Call Home Assistant API to set the status and activity sensors
     If ($currentStatus -ne $Status -and $Status -ne $null) {
         $currentStatus = $Status
-
-        # Use default credentials in the case of a proxy server
-        $Wcl = new-object System.Net.WebClient
-        $Wcl.Headers.Add("user-agent", "PowerShell Script")
-        $Wcl.Proxy.Credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials 
         InvokeHA -state $currentStatus -friendlyName $entityStatusName -icon $defaultIcon -entityId $entityStatusId
     }
 
