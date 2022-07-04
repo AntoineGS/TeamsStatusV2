@@ -1,5 +1,6 @@
 ﻿# sensor.teams_activity
 $taNotInACall = "Not in a call"
+$taIncomingCall = "Incoming call"
 $taInACall = "In a call"
 
 # sensor.teams_status

@@ -80,7 +80,8 @@ Get-Content -Path "C:\Users\$env:USERNAME\AppData\Roaming\Microsoft\Teams\logs.t
         'SfB:TeamsNoCall',`
         'SfB:TeamsPendingCall',`
         'SfB:TeamsActiveCall',`
-        'name: desktop_call_state_change_send, isOngoing' | Select-Object -Last 1
+        'name: desktop_call_state_change_send, isOngoing',`
+        'Attempting to play audio for notification type 1' | Select-Object -Last 1
 
     # Get Teams application process
     $TeamsProcess = Get-Process -Name Teams -ErrorAction SilentlyContinue
@@ -108,6 +109,10 @@ Get-Content -Path "C:\Users\$env:USERNAME\AppData\Roaming\Microsoft\Teams\logs.t
                     $TeamsActivity -like "*SfB:TeamsActiveCall*" -or `
                     $TeamsActivity -like "*name: desktop_call_state_change_send, isOngoing: true*") {
                 $Activity = $taInACall
+                $ActivityIcon = $iconInACall
+            }
+            ElseIf ($TeamsActivity -like "*Attempting to play audio for notification type 1*") {
+                $Activity = $taIncomingCall
                 $ActivityIcon = $iconInACall
             }
         }
