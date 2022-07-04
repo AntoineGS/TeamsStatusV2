@@ -1,15 +1,19 @@
-﻿$lgAvailable = "Available"
-$lgBusy = "Busy"
-$lgOnThePhone = "On the phone"
-$lgAway = "Away"
-$lgBeRightBack = "Be right back"
-$lgDoNotDisturb = "Do not disturb"
-$lgPresenting = "Presenting"
-$lgFocusing = "Focusing"
-$lgInAMeeting = "In a meeting"
-$lgOffline = "Offline"
-$lgNotInACall = "Not in a call"
-$lgInACall = "In a call"
+﻿# sensor.teams_activity
+$taNotInACall = "Not in a call"
+$taInACall = "In a call"
+
+# sensor.teams_status
+$tsAvailable = "Available"
+$tsBusy = "Busy"
+$tsAway = "Away"
+$tsBeRightBack = "Be right back"
+$tsDoNotDisturb = "Do not disturb"
+$tsOffline = "Offline"
+$tsFocusing = "Focusing"
+$tsPresenting = "Presenting"
+$tsInAMeeting = "In a meeting"
+$tsOnThePhone = "On the phone"
+
 # sensor.teams_cam_status
-$lgCameraOn = "On"
-$lgCameraOff = "Off"
+$csCameraOn = "On"
+$csCameraOff = "Off"

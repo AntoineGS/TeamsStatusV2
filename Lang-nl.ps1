@@ -1,15 +1,19 @@
-﻿$lgAvailable = "Beschikbaar"
-$lgBusy = "Bezet"
-$lgOnThePhone = "Aan de telefoon"
-$lgAway = "Afwezig"
-$lgBeRightBack = "Zo terug"
-$lgDoNotDisturb = "Niet storen"
-$lgPresenting = "Presenteren"
-$lgFocusing = "Focussen"
-$lgInAMeeting = "In een vergadering"
-$lgOffline = "Offline"
-$lgNotInACall = "Niet in gesprek"
-$lgInACall = "In gesprek"
+﻿# sensor.teams_activity
+$taNotInACall = "Niet in gesprek"
+$taInACall = "In gesprek"
+
+# sensor.teams_status
+$tsAvailable = "Beschikbaar"
+$tsBusy = "Bezet"
+$tsAway = "Afwezig"
+$tsBeRightBack = "Zo terug"
+$tsDoNotDisturb = "Niet storen"
+$tsOffline = "Offline"
+$tsFocusing = "Focussen"
+$tsPresenting = "Presenteren"
+$tsInAMeeting = "In een vergadering"
+$tsOnThePhone = "Aan de telefoon"
+
 # sensor.teams_cam_status
-$lgCameraOn = "Aan"
-$lgCameraOff = "Uit"
+$csCameraOn = "Aan"
+$csCameraOff = "Uit"
