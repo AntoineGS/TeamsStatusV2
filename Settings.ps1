@@ -6,9 +6,9 @@ $settingsHAUrl = "<HAUrl>" # Example: https://yourha.duckdns.org or http://192.1
 $Lang = "en"
 
 # Set icons to use for call activity
-$iconInACall = "mdi:phone-in-talk-outline"
+$iconInACall = "mdi:phone-in-talk"
+$iconIncomingCall = "mdi:phone-incoming"
 $iconNotInACall = "mdi:phone-off"
-$iconMonitoring = "mdi:api"
 
 # Set entities to post to
 # Friendly names are required or they get reset in HA through the API...
