@@ -25,14 +25,14 @@
 Param($SetStatus)
 
 # Import Settings PowerShell script
-. ($PSScriptRoot + "\Settings.ps1")
-$locLang = if ([string]::IsNullOrEmpty($env:TSLANG)) {$Lang} else {$env:TSLANG}
-. ($PSScriptRoot + "\Lang-$locLang.ps1")
 . ($PSScriptRoot + "\TSFunctions.ps1")
+. ($PSScriptRoot + "\Settings.ps1")
+$locLang = GetSysVar -envVar $env:TSLANG -localVar $Lang
+. ($PSScriptRoot + "\Lang-$locLang.ps1")
 
 # Some variables
-$HAToken = if ([string]::IsNullOrEmpty($env:TSHATOKEN)) {$settingsHAToken} else {$env:TSHATOKEN}
-$HAUrl = if ([string]::IsNullOrEmpty($env:TSHAURL)) {$settingsHAUrl} else {$env:TSHAURL}
+$HAToken = GetSysVar -envVar $env:TSHATOKEN -localVar $settingsHAToken
+$HAUrl = GetSysVar -envVar $env:TSHAURL -localVar $settingsHAUrl
 
 $headers = @{"Authorization"="Bearer $HAToken";}
 $teamsStatusHash = @{
