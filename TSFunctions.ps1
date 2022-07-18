@@ -24,3 +24,11 @@ function InvokeHA {
     $params = $params | ConvertTo-Json
     Invoke-RestMethod -Uri "$HAUrl/api/states/$entityId" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json"    
 }
+
+# In this design the environment var takes precedence over the local variable
+function GetSysVar{
+    param([string]$envVar, [string]$localVar)
+
+    $result = if ([string]::IsNullOrEmpty($envVar)) {$localVar} else {$envVar}
+    return $result
+}
