@@ -26,7 +26,8 @@ Param($SetStatus)
 
 # Import Settings PowerShell script
 . ($PSScriptRoot + "\Settings.ps1")
-. ($PSScriptRoot + "\Lang-$Lang.ps1")
+$locLang = if ([string]::IsNullOrEmpty($env:TSLANG)) {$Lang} else {$env:TSLANG}
+. ($PSScriptRoot + "\Lang-$locLang.ps1")
 . ($PSScriptRoot + "\TSFunctions.ps1")
 
 # Some variables
