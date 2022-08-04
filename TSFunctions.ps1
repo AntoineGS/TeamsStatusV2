@@ -7,6 +7,7 @@
 function InvokeHA {
     param ([string]$state, [string]$friendlyName, [string]$icon, [string]$entityId)
 
+    $headers = @{"Authorization"="Bearer $HAToken"}
     # Use default credentials in the case of a proxy server, not sure if this is doing anything as $Wcl is not used anywhere
     $Wcl = new-object System.Net.WebClient
     $Wcl.Headers.Add("user-agent", "PowerShell Script")

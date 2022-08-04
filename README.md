@@ -48,10 +48,11 @@ sensor:
   * Using Environment Variables (preferred as it allows you to change the script files easily without re-adding your configurations)
     * Add a variable `TSHATOKEN` with the token you generated (ie: eyJ0eXAiOiJKV1... with many more characters)
     * Add a variable `TSHAURL` with the URL to your Home Assistant server (ie: https://yourha.duckdns.org or http://192.168.1.50:8123)
+	* Optional: Add a variable `TSUSERNAME` with your Windows username, if not set it will get it from Windows
   * Edit the Settings.ps1 file and:
     * Replace `<Insert token>` with the token you generated
     * Replace `<HA URL>` with the URL to your Home Assistant server
-    * Adjust the language settings to your preference
+    * Optional: Adjust the language settings to your preference
 * Start a elevated PowerShell prompt, and execute the following scripts
   ```powershell
   Unblock-File C:\Scripts\Install.ps1
