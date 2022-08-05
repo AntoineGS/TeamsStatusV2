@@ -33,8 +33,9 @@ $locLang = GetSysVar -envVar $env:TSLANG -localVar $Lang
 # Some variables
 $HAToken = GetSysVar -envVar $env:TSHATOKEN -localVar $settingsHAToken
 $HAUrl = GetSysVar -envVar $env:TSHAURL -localVar $settingsHAUrl
+#Both are stored as system variables, TSUSERNAME is one defined just for use while USERNAME is Windows
+$Username = GetSysVar -envVar $env:TSUSERNAME -localVar $env:USERNAME
 
-$headers = @{"Authorization"="Bearer $HAToken";}
 $teamsStatusHash = @{
     # Teams short name = @{Teams long name = HA display name}
     # Can be set manually in Teams
@@ -68,7 +69,7 @@ If($null -ne $SetStatus){
 }
 
 # Start monitoring the Teams logfile when no parameter is used to run the script
-Get-Content -Path "C:\Users\$env:USERNAME\AppData\Roaming\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1000 -ReadCount 0 -Wait | % {
+Get-Content -Path "C:\Users\$Username\AppData\Roaming\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1000 -ReadCount 0 -Wait | % {
     # Get Teams Logfile and last icon overlay status
     $TeamsStatus = $_ | Select-String -Pattern `
         'Setting the taskbar overlay icon -',`
@@ -134,7 +135,7 @@ Get-Content -Path "C:\Users\$env:USERNAME\AppData\Roaming\Microsoft\Teams\logs.t
       # When leaving a call it maybe not trigger as something non-camera related needs to get logged to trigger the check.
     If($Activity -eq $taInACall -or $camStatus -eq $csCameraOn) {
         $registryPath = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged\" + 
-                        "C:#Users#$env:USERNAME#AppData#Local#Microsoft#Teams#current#Teams.exe"
+                        "C:#Users#$Username#AppData#Local#Microsoft#Teams#current#Teams.exe"
 
         $webcam = Get-ItemProperty -Path $registryPath -Name LastUsedTimeStop | select LastUsedTimeStop
 
