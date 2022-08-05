@@ -48,7 +48,8 @@ sensor:
   * Using Environment Variables (preferred as it allows you to change the script files easily without re-adding your configurations)
     * Add a variable `TSHATOKEN` with the token you generated (ie: eyJ0eXAiOiJKV1... with many more characters)
     * Add a variable `TSHAURL` with the URL to your Home Assistant server (ie: https://yourha.duckdns.org or http://192.168.1.50:8123)
-	* Optional: Add a variable `TSUSERNAME` with your Windows username, if not set it will get it from Windows
+    * Optional: Add a variable `TSUSERNAME` with your Windows username, if not set it will get it from Windows
+    * Optional: Add a variable `TSLANG` with a supported language (en, nl)
   * Edit the Settings.ps1 file and:
     * Replace `<Insert token>` with the token you generated
     * Replace `<HA URL>` with the URL to your Home Assistant server
