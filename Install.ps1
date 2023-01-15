@@ -12,9 +12,11 @@ if ($enableLogs -eq "Y") {
     $loggingParam = "2>&1 | tee -filePath $PSScriptRoot\TeamsStatusLog.txt"
 }
 
-$TargetFile = "wscript C:\Scripts\Start.vbs"
-$ShortcutFile = "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Start TeamsStatus.lnk"
+$TargetFile = "wscript"
+$Arguments = "C:\Scripts\Start.vbs"
+$ShortcutFile = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\Start TeamsStatus.lnk"
 $WScriptShell = New-Object -ComObject WScript.Shell
 $Shortcut = $WScriptShell.CreateShortcut($ShortcutFile)
 $Shortcut.TargetPath = $TargetFile
+$Shortcut.Arguments = $Arguments
 $Shortcut.Save()
