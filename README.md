@@ -54,7 +54,7 @@ sensor:
   Unblock-File C:\Scripts\Install.ps1
   C:\Scripts\Install.ps1
   ```
-* When asked, enter your Windows password, the service will be installed under that user to have access to the registry key for the camera
+* Execute the file as requested in the Install.ps1 output
 * After completing the steps above, start your Teams client and verify if the status and activity is updated as expected.
   
 ## Uninstallation
