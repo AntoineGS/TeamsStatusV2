@@ -1,13 +1,7 @@
 . ($PSScriptRoot + "\Settings.ps1")
 . ($PSScriptRoot + "\TSFunctions.ps1")
 
-$installPath = $env:TSINSTALLPATH
 $appDataFolder = GetAppDataFolder
-
-if ($PSScriptRoot -ne $installPath) {
-	Write-Output 'Please set up the environment variable "TSINSTALLPATH" or the "$installPath" variable in the Settings.ps1 file before running this.'
-	Exit
-}
 
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 Unblock-File $PSScriptRoot\Settings.ps1
@@ -21,6 +15,7 @@ $ShortcutFile = "$appDataFolder\Microsoft\Windows\Start Menu\Programs\Startup\St
 $WScriptShell = New-Object -ComObject WScript.Shell
 $Shortcut = $WScriptShell.CreateShortcut($ShortcutFile)
 $Shortcut.TargetPath = $TargetFile
+$Shortcut.WorkingDirectory = $PSScriptRoot
 $Shortcut.Save()
 
 Write-Output ""
