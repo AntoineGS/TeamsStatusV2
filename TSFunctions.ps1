@@ -21,10 +21,20 @@ function InvokeHA {
     Invoke-RestMethod -Uri "$HAUrl/api/states/$entityId" -Method POST -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($params)) -ContentType "application/json"    
 }
 
-# In this design the environment var takes precedence over the local variable
-function GetSysVar{
-    param([string]$envVar, [string]$localVar)
+function GetAppDataFolder {
+    $userName = GetUserName
+    return "C:\Users\$userName\AppData\Roaming"
+}
 
-    $result = if ([string]::IsNullOrEmpty($envVar)) {$localVar} else {$envVar}
-    return $result
+function GetFirstNonEmpty{
+	param([string]$firstString, [string]$secondString)
+	$result = if ([string]::IsNullOrEmpty($firstString)) {$secondString} else {$firstString}
+	return $result
+}
+
+function GetUserName {
+	$configUser = $env:TSUSERNAME 
+	$actualUser = $env:USERNAME
+    $result = GetFirstNonEmpty -firstString $configUser -secondString $actualUser
+	return $result
 }

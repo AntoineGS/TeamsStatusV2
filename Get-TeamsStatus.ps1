@@ -15,11 +15,6 @@
     The activity entity (sensor.teams_activity by default) shows if you
     are in a call or not based on the App updates deamon, which is paused as soon as 
     you join a call.
-.PARAMETER SetStatus
-    Run the script with the SetStatus-parameter to set the status of Microsoft Teams
-    directly from the commandline.
-.EXAMPLE
-    .\Get-TeamsStatus.ps1 -SetStatus "Offline"
 #>
 # Configuring parameter for interactive run
 Param($SetStatus)
@@ -27,14 +22,14 @@ Param($SetStatus)
 # Import Settings PowerShell script
 . ($PSScriptRoot + "\TSFunctions.ps1")
 . ($PSScriptRoot + "\Settings.ps1")
-$locLang = GetSysVar -envVar $env:TSLANG -localVar $Lang
+$locLang = GetFirstNonEmpty -firstString $env:TSLANG -secondString "en"
 . ($PSScriptRoot + "\Lang-$locLang.ps1")
 
 # Some variables
-$HAToken = GetSysVar -envVar $env:TSHATOKEN -localVar $settingsHAToken
-$HAUrl = GetSysVar -envVar $env:TSHAURL -localVar $settingsHAUrl
-#Both are stored as system variables, TSUSERNAME is one defined just for use while USERNAME is Windows
-$Username = GetSysVar -envVar $env:TSUSERNAME -localVar $env:USERNAME
+$HAToken = $env:TSHATOKEN
+$HAUrl = $env:TSHAURL
+$appDataFolder = GetAppDataFolder
+$userName = GetUserName
 
 $teamsStatusHash = @{
     # Teams short name = @{Teams long name = HA display name}
@@ -69,7 +64,7 @@ If($null -ne $SetStatus){
 }
 
 # Start monitoring the Teams logfile when no parameter is used to run the script
-Get-Content -Path "C:\Users\$Username\AppData\Roaming\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1000 -ReadCount 0 -Wait | % {
+Get-Content -Path "$appDataFolder\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail 1000 -ReadCount 0 -Wait | % {
     # Get Teams Logfile and last icon overlay status
     $TeamsStatus = $_ | Select-String -Pattern `
         'Setting the taskbar overlay icon -',`
@@ -135,7 +130,7 @@ Get-Content -Path "C:\Users\$Username\AppData\Roaming\Microsoft\Teams\logs.txt" 
       # When leaving a call it maybe not trigger as something non-camera related needs to get logged to trigger the check.
     If($Activity -eq $taInACall -or $camStatus -eq $csCameraOn) {
         $registryPath = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged\" + 
-                        "C:#Users#$Username#AppData#Local#Microsoft#Teams#current#Teams.exe"
+                        "C:#Users#$userName#AppData#Local#Microsoft#Teams#current#Teams.exe"
 
         $webcam = Get-ItemProperty -Path $registryPath -Name LastUsedTimeStop | select LastUsedTimeStop
 
