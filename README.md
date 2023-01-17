@@ -44,16 +44,11 @@ sensor:
 * Copy and temporarily save the token somewhere you can find it later
 * Restart Home Assistant to have the new sensors added
 * Download the files from this repository and save them to any folder (we will use C:\Scripts in this example)
-* Configure the Service using one of the two methods below
-  * Using Environment Variables (preferred as it allows you to change the script files easily without re-adding your configurations)
-    * Add a variable `TSHATOKEN` with the token you generated (ie: eyJ0eXAiOiJKV1... with many more characters)
-    * Add a variable `TSHAURL` with the URL to your Home Assistant server (ie: https://yourha.duckdns.org or http://192.168.1.50:8123)
-    * Optional: Add a variable `TSUSERNAME` with your Windows username, if not set it will get it from Windows
-    * Optional: Add a variable `TSLANG` with a supported language (en, nl)
-  * Edit the Settings.ps1 file and:
-    * Replace `<Insert token>` with the token you generated
-    * Replace `<HA URL>` with the URL to your Home Assistant server
-    * Optional: Adjust the language settings to your preference
+* Configure the script using Environment Variables
+  * Add a variable `TSHATOKEN` with the token you generated (ie: eyJ0eXAiOiJKV1... with many more characters)
+  * Add a variable `TSHAURL` with the URL to your Home Assistant server (ie: https://yourha.duckdns.org or http://192.168.1.50:8123)
+  * Optional: Add a variable `TSUSERNAME` with your Windows username, if not set it will get it from Windows
+  * Optional: Add a variable `TSLANG` with a supported language (en, nl)
 * Start a elevated PowerShell prompt, and execute the following scripts
   ```powershell
   Unblock-File C:\Scripts\Install.ps1
@@ -68,8 +63,8 @@ Using the previous path as an example, in PowerShell you would run:
   ```powershell
   C:\Scripts\Uninstall.ps1
   ```
-Note: You must have run the `Install.ps1` at some point or you will get a file "is not is not digitally signed" error.
-If that happens, simply run the following before executing the uninstaller again:
+Note: This will not stop the script if it is currently executing, if you would like to do so just kill it (powershell.exe).
+If you get an error that the file "is not is not digitally signed", simply run the following before executing the uninstaller again:
   ```powershell
   Unblock-File C:\Scripts\Uninstall.ps1
   ```
