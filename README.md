@@ -21,31 +21,17 @@ It could be adapted to work with any home automation platform that provides an A
 ```yaml
 # configuration.yaml
 
-input_text:
-  microsoft_teams_status:
-    name: Microsoft Teams status
-    icon: mdi:account-badge
-  microsoft_teams_activity:
-    name: Microsoft Teams activity
-    icon: mdi:phone
-  microsoft_teams_camera_status:
-    name: Microsoft Teams camera status
-    icon: mdi:webcam
-
 template:
   - sensor:
       - name: Microsoft Teams status
         unique_id: e4f476369caf
-        state: "{{states('input_text.microsoft_teams_status')}}"
-        icon: mdi:account-badge
+        state: "{{ None }}"
       - name: Microsoft Teams activity
         unique_id: 8b2cc27ca7eb
-        state: "{{states('input_text.microsoft_teams_activity')}}"
-        icon: mdi:phone
+        state: "{{ None }}"
       - name: Microsoft Teams camera status
         unique_id: 3f37d7f25d67
-        state: "{{states('input_text.microsoft_teams_camera_status')}}"
-        icon: mdi:webcam
+        state: "{{ None }}"
 ```
 
 * Generate a Long-lived access token ([see HA documentation](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token))
