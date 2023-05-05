@@ -3,7 +3,7 @@
 
 $appDataFolder = GetAppDataFolder
 
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Unblock-File $PSScriptRoot\Settings.ps1
 Unblock-File $PSScriptRoot\Lang-*.ps1
 Unblock-File $PSScriptRoot\Get-TeamsStatus.ps1
