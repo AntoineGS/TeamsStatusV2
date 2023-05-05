@@ -7,37 +7,45 @@ This solution is great for anyone who's organization does not allow this.
 
 This script makes use of three sensors that are created in Home Assistant up front:
 
-* sensor.teams_status
-* sensor.teams_activity
-* sensor.teams_cam_status
-
-sensor.teams_status displays that availability status of your Teams client based on the icon overlay in the taskbar on Windows. 
-sensor.teams_activity shows if you are in a call or not based on the App updates deamon, which is paused as soon as you join a call.
-sensor.teams_cam_status shows if you have your webcam turned on or not during a call.
+* `sensor.microsoft_teams_status`: displays that availability status of your Teams client based on the icon overlay in the taskbar on Windows.
+* `sensor.microsoft_teams_activity`: shows if you are in a call or not based on the App updates deamon, which is paused as soon as you join a call.
+* `sensor.microsoft_teams_camera_status`: shows if you have your webcam turned on or not during a call.
 
 ## Important
 This solution is created to work with Home Assistant. 
 It could be adapted to work with any home automation platform that provides an API, but you would probably need to change the PowerShell code.
 
 ## Installation
-* Create the three Teams sensors in the Home Assistant configuration.yaml file
+* Create the three Microsoft Teams sensors and input texts in the Home Assistant `configuration.yaml` file
 
 ```yaml
-sensor:
-  - platform: template
-    sensors:
-      teams_status: 
-        friendly_name: "Microsoft Teams status"
-        value_template: "{{states('input_text.teams_status')}}"
-        unique_id: sensor.teams_status
-      teams_cam_status:
-        friendly_name: "Microsoft Teams Camera Status"
-        value_template: "{{states('input_text.teams_cam_status')}}"
-        unique_id: sensor.teams_cam_status        
-      teams_activity:
-        friendly_name: "Microsoft Teams activity"
-        value_template: "{{states('input_text.teams_activity')}}"
-        unique_id: sensor.teams_activity
+# configuration.yaml
+
+input_text:
+  microsoft_teams_status:
+    name: Microsoft Teams status
+    icon: mdi:account-badge
+  microsoft_teams_activity:
+    name: Microsoft Teams activity
+    icon: mdi:phone
+  microsoft_teams_camera_status:
+    name: Microsoft Teams camera status
+    icon: mdi:webcam
+
+template:
+  - sensor:
+      - name: Microsoft Teams status
+        unique_id: e4f476369caf
+        state: "{{states('input_text.microsoft_teams_status')}}"
+        icon: mdi:account-badge
+      - name: Microsoft Teams activity
+        unique_id: 8b2cc27ca7eb
+        state: "{{states('input_text.microsoft_teams_activity')}}"
+        icon: mdi:phone
+      - name: Microsoft Teams camera status
+        unique_id: 3f37d7f25d67
+        state: "{{states('input_text.microsoft_teams_camera_status')}}"
+        icon: mdi:webcam
 ```
 
 * Generate a Long-lived access token ([see HA documentation](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token))
