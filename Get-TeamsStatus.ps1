@@ -55,7 +55,7 @@ $currentCamStatus = $null
 # Some defaults
 $camStatus = $csCameraOff
 $camIcon = "mdi:camera-off"
-$defaultIcon = "mdi:microsoft-teams"
+$defaultIcon = "mdi:account-badge"
 
 # Run the script when a parameter is used and stop when done
 If($null -ne $SetStatus){
@@ -121,8 +121,8 @@ Get-Content -Path "$appDataFolder\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail
         $ActivityIcon = $iconNotInACall
     }
     
-    Write-Host "Teams Status: $Status"
-    Write-Host "Teams Activity: $Activity"
+    Write-Host "Microsoft Teams status: $Status"
+    Write-Host "Microsoft Teams activity: $Activity"
 
     # Webcam support (sensor.microsoft_teams_camera_status)
     # While in a call, we poke the registry for cam status (maybe too often), but I could not find a log entry to use as a trigger 
