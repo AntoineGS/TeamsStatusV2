@@ -1,9 +1,9 @@
-﻿# sensor.microsoft_teams_activity
+﻿# sensor.teams_activity
 $taNotInACall = "Nicht im Gespräch"
 $taIncomingCall = "Eingehender Anruf"
 $taInACall = "Im Gespräch"
 
-# sensor.microsoft_teams_status
+# sensor.teams_status
 $tsAvailable = "Verfügbar"
 $tsBusy = "Beschäftigt"
 $tsAway = "Abwesend"
@@ -15,6 +15,6 @@ $tsPresenting = "Präsentation"
 $tsInAMeeting = "In einer Besprechung"
 $tsOnThePhone = "Am Telefon"
 
-# sensor.microsoft_teams_camera_status
+# sensor.teams_cam_status
 $csCameraOn = "An"
 $csCameraOff = "Aus"

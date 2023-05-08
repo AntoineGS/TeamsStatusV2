@@ -10,9 +10,9 @@
 .DESCRIPTION
     This script is monitoring the Teams client logfile for certain changes. It
     makes use of two sensors that are created in Home Assistant up front.
-    The status entity (sensor.microsoft_teams_status by default) displays that availability 
+    The status entity (sensor.teams_status by default) displays that availability 
     status of your Teams client based on the icon overlay in the taskbar on Windows. 
-    The activity entity (sensor.microsoft_teams_activity by default) shows if you
+    The activity entity (sensor.teams_activity by default) shows if you
     are in a call or not based on the App updates deamon, which is paused as soon as 
     you join a call.
 #>
@@ -121,10 +121,10 @@ Get-Content -Path "$appDataFolder\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail
         $ActivityIcon = $iconNotInACall
     }
     
-    Write-Host "Microsoft Teams status: $Status"
-    Write-Host "Microsoft Teams activity: $Activity"
+    Write-Host "Teams status: $Status"
+    Write-Host "Teams activity: $Activity"
 
-    # Webcam support (sensor.microsoft_teams_camera_status)
+    # Webcam support (sensor.teams_cam_status)
     # While in a call, we poke the registry for cam status (maybe too often), but I could not find a log entry to use as a trigger 
       # to know when to check the camera status so it might be hit or miss. 
       # When leaving a call it maybe not trigger as something non-camera related needs to get logged to trigger the check.
