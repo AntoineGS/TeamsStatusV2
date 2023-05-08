@@ -16,23 +16,25 @@ This solution is created to work with Home Assistant.
 It could be adapted to work with any home automation platform that provides an API, but you would probably need to change the PowerShell code.
 
 ## Installation
-* Create the three Microsoft Teams sensors and input texts in the Home Assistant `configuration.yaml` file
+* Create the three Microsoft Teams sensors in the Home Assistant `configuration.yaml` file:
 
-```yaml
-# configuration.yaml
+  ```yaml
+  # configuration.yaml
 
-template:
-  - sensor:
-      - name: teams_status
-        unique_id: e4f476369caf
-        state: "{{ None }}"
-      - name: teams_activity
-        unique_id: 8b2cc27ca7eb
-        state: "{{ None }}"
-      - name: teams_cam_status
-        unique_id: 3f37d7f25d67
-        state: "{{ None }}"
-```
+  template:
+    - sensor:
+        - name: teams_status
+          unique_id: e4f476369caf
+          state: "{{ None }}"
+        - name: teams_activity
+          unique_id: 8b2cc27ca7eb
+          state: "{{ None }}"
+        - name: teams_cam_status
+          unique_id: 3f37d7f25d67
+          state: "{{ None }}"
+  ```
+
+  Their icons and friendly names will be automatically set by this script.
 
 * Generate a Long-lived access token ([see HA documentation](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token))
 * Copy and temporarily save the token somewhere you can find it later
