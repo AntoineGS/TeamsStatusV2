@@ -121,8 +121,8 @@ Get-Content -Path "$appDataFolder\Microsoft\Teams\logs.txt" -Encoding Utf8 -Tail
         $ActivityIcon = $iconNotInACall
     }
     
-    Write-Host "Teams status: $Status"
-    Write-Host "Teams activity: $Activity"
+    Write-Host "Teams Status: $Status"
+    Write-Host "Teams Activity: $Activity"
 
     # Webcam support (sensor.teams_cam_status)
     # While in a call, we poke the registry for cam status (maybe too often), but I could not find a log entry to use as a trigger 
