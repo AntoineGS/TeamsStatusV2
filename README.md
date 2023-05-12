@@ -23,15 +23,15 @@ It could be adapted to work with any home automation platform that provides an A
 
   template:
     - sensor:
-      - name: teams_status
-        unique_id: e4f476369caf
-        state: "{{ None }}"
-      - name: teams_activity
-        unique_id: 8b2cc27ca7eb
-        state: "{{ None }}"
-      - name: teams_cam_status
-        unique_id: 3f37d7f25d67
-        state: "{{ None }}"
+        - name: teams_status
+          unique_id: e4f476369caf
+          state: "{{ None }}"
+        - name: teams_activity
+          unique_id: 8b2cc27ca7eb
+          state: "{{ None }}"
+        - name: teams_cam_status
+          unique_id: 3f37d7f25d67
+          state: "{{ None }}"
   ```
 
   Their icons and friendly names will be automatically set by this script.
