@@ -7,38 +7,34 @@ This solution is great for anyone who's organization does not allow this.
 
 This script makes use of three sensors that are created in Home Assistant up front:
 
-* sensor.teams_status
-* sensor.teams_activity
-* sensor.teams_cam_status
-
-sensor.teams_status displays that availability status of your Teams client based on the icon overlay in the taskbar on Windows. 
-sensor.teams_activity shows if you are in a call or not based on the App updates deamon, which is paused as soon as you join a call.
-sensor.teams_cam_status shows if you have your webcam turned on or not during a call.
+* `sensor.teams_status`: displays that availability status of your Teams client based on the icon overlay in the taskbar on Windows.
+* `sensor.teams_activity`: shows if you are in a call or not based on the App updates deamon, which is paused as soon as you join a call.
+* `sensor.teams_cam_status`: shows if you have your webcam turned on or not during a call.
 
 ## Important
 This solution is created to work with Home Assistant. 
 It could be adapted to work with any home automation platform that provides an API, but you would probably need to change the PowerShell code.
 
 ## Installation
-* Create the three Teams sensors in the Home Assistant configuration.yaml file
+* Create the three Microsoft Teams sensors in the Home Assistant `configuration.yaml` file:
 
-```yaml
-sensor:
-  - platform: template
-    sensors:
-      teams_status: 
-        friendly_name: "Microsoft Teams status"
-        value_template: "{{states('input_text.teams_status')}}"
-        unique_id: sensor.teams_status
-      teams_cam_status:
-        friendly_name: "Microsoft Teams Camera Status"
-        value_template: "{{states('input_text.teams_cam_status')}}"
-        unique_id: sensor.teams_cam_status        
-      teams_activity:
-        friendly_name: "Microsoft Teams activity"
-        value_template: "{{states('input_text.teams_activity')}}"
-        unique_id: sensor.teams_activity
-```
+  ```yaml
+  # configuration.yaml
+
+  template:
+    - sensor:
+      - name: teams_status
+        unique_id: e4f476369caf
+        state: "{{ None }}"
+      - name: teams_activity
+        unique_id: 8b2cc27ca7eb
+        state: "{{ None }}"
+      - name: teams_cam_status
+        unique_id: 3f37d7f25d67
+        state: "{{ None }}"
+  ```
+
+  Their icons and friendly names will be automatically set by this script.
 
 * Generate a Long-lived access token ([see HA documentation](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token))
 * Copy and temporarily save the token somewhere you can find it later

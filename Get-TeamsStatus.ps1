@@ -55,7 +55,7 @@ $currentCamStatus = $null
 # Some defaults
 $camStatus = $csCameraOff
 $camIcon = "mdi:camera-off"
-$defaultIcon = "mdi:microsoft-teams"
+$defaultIcon = "mdi:account-badge"
 
 # Run the script when a parameter is used and stop when done
 If($null -ne $SetStatus){
