@@ -1,5 +1,10 @@
 # TeamsStatus
 
+## Notice
+The New Teams does not have the same kind of verbose logging (at least as of writing this) as the Legacy Teams.
+It does however support the WebSockets API which supports statuses for `in meeting` and `video is on`.
+I have written a new application here: https://github.com/AntoineGS/teams-status-rs
+
 ## Introduction
 This PowerShell script/service uses the local Teams' log file to track the status and activity of the logged in Teams user.
 Microsoft provides the status of your account via the Graph API, however to access the Graph API, your organization needs to grant consent for the organization so everybody can read their Teams status.
